@@ -2,6 +2,11 @@
 
 This custom component for Home Assistant allows users to access their Aldi Talk account data directly within Home Assistant, providing a convenient way to monitor account details such as account balance, data volume, and validity periods.
 
+![Version](https://img.shields.io/github/v/release/JonasJoKuJonas/homeassistant-AldiTalk)
+[![Downloads](https://img.shields.io/github/downloads/JonasJoKuJonas/homeassistant-AldiTalk/total)](https://tooomm.github.io/github-release-stats/?username=JonasJoKuJonas&repository=HomeAssistant-AldiTalk)
+
+
+
 ## Disclaimer
 
 This component uses web scraping, not an official Aldi Talk API. It may be subject to errors or changes in Aldi Talk's website structure that could affect functionality.
