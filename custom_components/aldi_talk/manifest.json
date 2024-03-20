@@ -5,8 +5,8 @@
     "@JonasJoKuJonas"
   ],
   "config_flow": true,
-  "documentation": "",
-  "issue_tracker": "",
+  "documentation": "https://github.com/JonasJoKuJonas/homeassistant-AldiTalk",
+  "issue_tracker": "https://github.com/JonasJoKuJonas/homeassistant-AldiTalk/issues",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "requirements": [],
