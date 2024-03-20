@@ -24,4 +24,6 @@ This component provides access to the following sensors within Home Assistant, a
 | Total Data Volume     | Total data volume available.     | `sensor.total_data_volume`     |
 | Remaining Data Volume | Data volume remaining.           | `sensor.remaining_data_volume` |
 
+You can change the unit of measurement via the entity configuration to display it in GB
+
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/Jonas_JoKu)
