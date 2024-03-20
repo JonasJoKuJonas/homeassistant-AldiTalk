@@ -1,0 +1,14 @@
+{
+  "domain": "aldi_talk",
+  "name": "Aldi Talk",
+  "codeowners": [
+    "@JonasJoKuJonas"
+  ],
+  "config_flow": true,
+  "documentation": "",
+  "issue_tracker": "",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "v0.0.0"
+}

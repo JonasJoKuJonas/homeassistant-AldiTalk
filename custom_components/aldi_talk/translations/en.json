@@ -1,0 +1,17 @@
+{
+    "title": "Aldi Talk",
+    "config": {
+        "step": {
+            "user": {
+                "title": "Aldi Talk",
+                "data": {
+                    "username": "Username",
+                    "password": "Password"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Invalid username or password"
+        }
+    }
+}
