@@ -12,6 +12,25 @@ This custom component for Home Assistant allows users to access their Aldi Talk 
 This component uses web scraping, not an official Aldi Talk API. It may be subject to errors or changes in Aldi Talk's website structure that could affect functionality.
 Use this component at your own risk, understanding potential risks including account issues or violations of Aldi Talk's terms. The developers are not affiliated with Aldi Talk and are not liable for any damages resulting from its use. Your use indicates acceptance of these risks.
 
+
+## Instalation
+Unfortunately, at the moment, it's not available directly from the HACS store. However, you can still install it by following these steps:
+
+1. Add the custom repository to your HACS:
+   - Navigate to HACS in your Home Assistant instance.
+   - Go to Settings.
+   - Under ADD CUSTOM REPOSITORY, paste the URL: `https://github.com/JonasJoKuJonas/homeassistant-AldiTalk` and select Integration as the Category.
+   - Click Save.
+
+2. Install the integration:
+   - After adding the custom repository, go back to the HACS dashboard.
+   - Click on Integrations.
+   - Search for "AldiTalk".
+   - You should see the integration listed. Click on it.
+   - Finally, click Install.
+3. Reboot
+
+
 ## Setup Instructions
 
 1. Ensure you have your [Aldi Talk login credentials](https://login.alditalk-kundenbetreuung.de/sso/UI/Login?service=login) ready.
