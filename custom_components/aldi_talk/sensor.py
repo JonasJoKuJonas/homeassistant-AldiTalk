@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CURRENCY_EURO, UnitOfInformation
 from homeassistant.core import HomeAssistant
@@ -25,7 +29,7 @@ async def async_setup_entry(
     coordinator: AldiTalkCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     entities = [
-        DataUsageSensor(
+        RemainingVolumeSensor(
             {
                 "key": "remaining_data_volume",
                 "name": "Remaining Data Volume",
@@ -33,7 +37,7 @@ async def async_setup_entry(
             },
             coordinator,
         ),
-        DataUsageSensor(
+        VolumeSensor(
             {
                 "key": "total_data_volume",
                 "name": "Total Data Volume",
@@ -70,7 +74,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class DataUsageSensor(AldiTalkCoordinatorEntity, SensorEntity):
+class VolumeSensor(AldiTalkCoordinatorEntity, SensorEntity):
 
     def __init__(self, sensor, coordinator):
         """Initialize the sensor."""
@@ -78,6 +82,14 @@ class DataUsageSensor(AldiTalkCoordinatorEntity, SensorEntity):
 
         self._attr_device_class = SensorDeviceClass.DATA_SIZE
         self._attr_native_unit_of_measurement = UnitOfInformation.MEGABYTES
+
+
+class RemainingVolumeSensor(VolumeSensor):
+    def __init__(self, sensor, coordinator):
+        """Initialize the sensor."""
+        super().__init__(sensor, coordinator)
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_last_reset = coordinator.api_data.get("start_date")
 
 
 class DateSensor(AldiTalkCoordinatorEntity, SensorEntity):
@@ -96,3 +108,4 @@ class BalanceSensor(AldiTalkCoordinatorEntity, SensorEntity):
         super().__init__(coordinator, sensor)
 
         self._attr_native_unit_of_measurement = CURRENCY_EURO
+        self._attr_state_class = SensorStateClass.TOTAL
