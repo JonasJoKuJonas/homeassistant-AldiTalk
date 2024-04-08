@@ -78,17 +78,21 @@ class AldiTalk:
 
     def _extract_usage_remaining(self, soup):
         """Extract remaining data usage from parsed HTML."""
-        usage_remaining = (
-            soup.find("td", class_="pack__usage", colspan="2")
-            .find("span", class_="pack__usage-remaining")
-            .text
-        )
+        try:
+            usage_remaining = (
+                soup.find("td", class_="pack__usage", colspan="2")
+                .find("span", class_="pack__usage-remaining")
+                .text
+            )
 
-        unit = (
-            soup.find("td", class_="pack__usage", colspan="2")
-            .find("span", class_="pack__usage-unit")
-            .text
-        )
+            unit = (
+                soup.find("td", class_="pack__usage", colspan="2")
+                .find("span", class_="pack__usage-unit")
+                .text
+            )
+        except AttributeError:
+            self.logger.error("Failed to find remaining data usage element.")
+            return None
 
         try:
             usage_remaining = float(usage_remaining.strip().replace(",", "."))
