@@ -14,22 +14,12 @@ Use this component at your own risk, understanding potential risks including acc
 
 
 ## Instalation
-Unfortunately, at the moment, it's not available directly from the HACS store. However, you can still install it by following these steps:
 
-1. Add the custom repository to your HACS:
-   - Navigate to HACS in your Home Assistant instance.
-   - Go to Settings.
-   - Under ADD CUSTOM REPOSITORY, paste the URL: `https://github.com/JonasJoKuJonas/homeassistant-AldiTalk` and select Integration as the Category.
-   - Click Save.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=JonasJoKuJonas&repository=homeassistant-AldiTalk&category=Integration)
 
-2. Install the integration:
-   - After adding the custom repository, go back to the HACS dashboard.
-   - Click on Integrations.
-   - Search for "AldiTalk".
-   - You should see the integration listed. Click on it.
-   - Finally, click Install.
-3. Reboot
-
+1. Download
+2. Reboot
+3. Setup
 
 ## Setup Instructions
 
