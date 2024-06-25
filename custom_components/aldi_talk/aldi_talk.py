@@ -105,27 +105,29 @@ class AldiTalk:
 
     def _extract_usage_total(self, soup):
         """Extract total data usage from parsed HTML."""
-        usage_total = (
-            soup.find("td", class_="pack__usage", colspan="2")
-            .find("span", class_="oftotal")
-            .find("span", class_="pack__usage-total")
-            .text
-        )
-
-        unit = (
-            soup.find("td", class_="pack__usage", colspan="2")
-            .find("span", class_="oftotal")
-            .find("span", class_="pack__usage-unit")
-            .text
-        )
-
         try:
+            usage_total = (
+                soup.find("td", class_="pack__usage", colspan="2")
+                .find("span", class_="oftotal")
+                .find("span", class_="pack__usage-total")
+                .text
+            )
+
+            unit = (
+                soup.find("td", class_="pack__usage", colspan="2")
+                .find("span", class_="oftotal")
+                .find("span", class_="pack__usage-unit")
+                .text
+            )
+
             usage_total = float(usage_total.strip().replace(",", "."))
             if unit == "GB":
                 usage_total *= 1000
             return usage_total
         except ValueError:
             self.logger.error("Failed to parse total data usage.")
+        except AttributeError:
+            self.logger.error("Failed to find total data usage element.")
         return None
 
     def _extract_end_date(self, soup):
