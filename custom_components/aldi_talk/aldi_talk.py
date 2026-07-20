@@ -222,7 +222,13 @@ class AldiTalk:
             or AUTH_BASE in final_url
             or "/signin" in final_url
         ):
-            raise ValueError(
+            # RuntimeError (not ValueError): the coordinator maps ValueError to
+            # ConfigEntryAuthFailed (reauth prompt) and everything else to a
+            # transient UpdateFailed. Not reaching the overview here is usually a
+            # transient hiccup in the multi-step redirect chain, not bad
+            # credentials, so it should retry silently rather than nag for a
+            # reauth. Genuine credential rejection is raised as ValueError above.
+            raise RuntimeError(
                 "Login failed: portal did not reach the authenticated overview."
             )
 
