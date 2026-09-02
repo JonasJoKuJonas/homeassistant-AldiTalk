@@ -18,6 +18,16 @@ PORTAL_OVERVIEW_URL = f"{PORTAL_BASE}/portal/auth/uebersicht/"
 BFF207 = "/scs/bff/scs-207-customer-master-data-bff/customer-master-data"
 BFF209 = "/scs/bff/scs-209-selfcare-dashboard-bff/selfcare-dashboard"
 
+# Divisor to convert a pack amount into gigabytes. The portal states the unit
+# per pack in the "unit" field (observed: "kilobytes").
+UNIT_DIVISORS_TO_GB = {
+    "bytes": 1024**3,
+    "kilobytes": 1024**2,
+    "megabytes": 1024,
+    "gigabytes": 1,
+}
+DEFAULT_UNIT = "kilobytes"
+
 
 class AldiTalk:
     """Class for interacting with the Aldi Talk portal."""
@@ -377,16 +387,21 @@ class AldiTalk:
                     continue
 
                 try:
-                    allocated_kb = int(pack["allocated"])
-                    used_kb = int(pack["used"])
+                    allocated = self._parse_amount(pack["allocated"])
+                    used = self._parse_amount(pack["used"])
                 except (KeyError, TypeError, ValueError):
                     continue
 
                 entries.append(
                     {
-                        "allocated_kb": allocated_kb,
-                        "used_kb": used_kb,
+                        "allocated": allocated,
+                        "used": used,
+                        "unit": (pack.get("unit") or DEFAULT_UNIT).lower(),
                         "next_expiration": pack.get("nextExpirationDate", ""),
+                        # The plan start is on the offer, not on the pack.
+                        "start_date": offer.get("startDate")
+                        or offer.get("startDateTime")
+                        or "",
                         "balance_attribute_reference": pack.get(
                             "balanceAttributeReference", ""
                         ),
@@ -395,11 +410,24 @@ class AldiTalk:
 
         return entries, total_balance, offer_name
 
+    def _parse_amount(self, value):
+        """Parse an amount from a data pack.
+
+        The portal returns these as float strings, sometimes in exponential
+        notation ("6.291456E7", "336390.0"). int() on the raw string raises
+        ValueError, which made the caller drop the whole data pack, so every
+        volume and date sensor stayed empty while only the balance worked.
+        """
+        return float(value)
+
     def _calculate_data_metrics(self, entry):
-        allocated_kb = entry["allocated_kb"]
-        used_kb = entry["used_kb"]
-        total_data_volume = round(allocated_kb / (1024 * 1024), 2)
-        remaining_data_volume = round((allocated_kb - used_kb) / (1024 * 1024), 2)
+        divisor = UNIT_DIVISORS_TO_GB.get(
+            entry.get("unit", DEFAULT_UNIT), UNIT_DIVISORS_TO_GB[DEFAULT_UNIT]
+        )
+        allocated = entry["allocated"]
+        used = entry["used"]
+        total_data_volume = round(allocated / divisor, 2)
+        remaining_data_volume = round((allocated - used) / divisor, 2)
 
         if total_data_volume:
             remaining_data_percentage = round(
@@ -446,9 +474,12 @@ class AldiTalk:
             ]
 
             self._end_date = self._parse_datetime(standard_entry.get("next_expiration"))
-            self._start_date = (
-                self._end_date - timedelta(days=28) if self._end_date else None
-            )
+            # The offer carries the real start of the plan. The previous
+            # "end date minus 28 days" approximation is wrong for every plan
+            # with a different runtime (e.g. the yearly packages).
+            self._start_date = self._parse_datetime(standard_entry.get("start_date"))
+            if self._start_date is None and self._end_date:
+                self._start_date = self._end_date - timedelta(days=28)
         else:
             self._total_data_volume = None
             self._remaining_data_volume = None
